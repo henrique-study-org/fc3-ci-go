@@ -8,13 +8,12 @@ jobs:
     runs-on: ubuntu-latest  # where the ci agent will run
     strategy:
       matrix:
-        go: ['1.19', '1.15'] # can be any key
+        go: ['1.15', '1.14'] # can be any key
     steps:
       - uses: actions/checkout@v2 # takes the data pushed and uploads in the ubuntu
       - uses: actions/setup-go@v2 # action to setup the go environment
         with:
           go-version: ${{ matrix.go }}
-      - run: go mod init  
       - run: go test  # bash commands
       - run: go run math.go
 
