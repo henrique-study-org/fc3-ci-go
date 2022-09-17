@@ -1,6 +1,9 @@
 name: ci-golang-workflow
-on: [push] # when a push happens, the ci workflow will run
-
+on: [pull_request] 
+    #push: when a push happens, the ci workflow will run
+    pull_request:
+      branches:
+        - develop
 jobs:
   check-application:
     runs-on: ubuntu-latest  # where the ci agent will run
