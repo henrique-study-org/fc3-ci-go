@@ -1,0 +1,15 @@
+name: ci-golang-workflow
+on: [push] # when a push happens, the ci workflow will run
+
+jobs:
+  check-application:
+    runs-on: ubuntu-latest  # where the ci agent will run
+    steps:
+      - uses: actions/checkout@v2 # takes the data pushed and uploads in the ubuntu
+      - uses: actions/setup-go@v2 # action to setup the go environment
+        with:
+          go-version: 1.15  # parameter to the setup-go
+      - run: go test  # bash commands
+      - run: go run math.go
+
+
