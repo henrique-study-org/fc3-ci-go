@@ -13,7 +13,8 @@ jobs:
       - uses: actions/checkout@v2 # takes the data pushed and uploads in the ubuntu
       - uses: actions/setup-go@v2 # action to setup the go environment
         with:
-          go-version: ${{ matrix.go }}  
+          go-version: ${{ matrix.go }}
+      - run: go mod init  
       - run: go test  # bash commands
       - run: go run math.go
 
