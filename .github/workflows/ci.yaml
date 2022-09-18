@@ -6,15 +6,37 @@ on:
 jobs:
   check-application:
     runs-on: ubuntu-latest  # where the ci agent will run
-    strategy:
-      matrix:
-        go: ['1.15', '1.14'] # can be any key
     steps:
-      - uses: actions/checkout@v2 # takes the data pushed and uploads in the ubuntu
-      - uses: actions/setup-go@v2 # action to setup the go environment
+      - name: Get data
+        uses: actions/checkout@v2 # takes the data pushed and uploads in the ubuntu
+      - name: Setup Golang
+        uses: actions/setup-go@v2 # action to setup the go environment
         with:
-          go-version: ${{ matrix.go }}
+          go-version: 1.15
+
       - run: go test  # bash commands
       - run: go run math.go
+      
+      # To use the docker build, we need the QEMU and the Buildx
+      - name: Set up QEMU  # names the action
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      # to push the image to dockerhub, we need to login
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }} 
+      
+      - name: Build and push
+        id: docker_build  # id: to use the result in another step
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: henriquelucasdf/fc3-ci-go:latest
+
 
 
